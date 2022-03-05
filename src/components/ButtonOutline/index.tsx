@@ -10,11 +10,11 @@ export type ButtonOutlineProps = {
 const ButtonOutline = ({
   children,
   icon,
-  size = 'large',
+  size = 'medium',
   ...props
 }: ButtonOutlineProps) => (
   <S.Wrapper {...props}>
-    <S.Box size={size} hasIcon={!!icon}>
+    <S.Box size={size} hasIcon={!!icon} data-testid="div">
       {!!icon && icon}
       {!!children && <span>{children}</span>}
     </S.Box>
