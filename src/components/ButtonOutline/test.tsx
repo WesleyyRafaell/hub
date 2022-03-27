@@ -47,4 +47,12 @@ describe('<ButtonOutline />', () => {
     ).toBeInTheDocument()
     expect(screen.getByTestId('icon')).toBeInTheDocument()
   })
+
+  it('should render button outline', () => {
+    render(<ButtonOutline outline>Sign In with Github</ButtonOutline>)
+
+    expect(screen.getByTestId('div')).toHaveStyle({
+      background: '#3a343a'
+    })
+  })
 })
