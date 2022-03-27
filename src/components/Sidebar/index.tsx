@@ -4,14 +4,16 @@ import { Heart } from '@styled-icons/bootstrap/Heart'
 import { Star } from '@styled-icons/bootstrap/Star'
 import ButtonOutline from 'components/ButtonOutline'
 import { signOut } from 'next-auth/react'
-import { useContext } from 'react'
-import { AuthContext } from 'contexts/authContext'
 
-const Sidebar = () => {
-  const { user } = useContext(AuthContext)
+type User = {
+  user: {
+    name?: string | null | undefined
+    email?: string | null | undefined
+    image?: string | null | undefined
+  }
+}
 
-  if (!user) return <p></p>
-
+const Sidebar = ({ user }: User) => {
   return (
     <S.Wrapper>
       <S.ContainerAvatar>

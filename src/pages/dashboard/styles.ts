@@ -7,4 +7,9 @@ export const Wrapper = styled.div`
   `}
 `
 
-export const Title = styled.h1``
+export const ContainerLoading = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+`

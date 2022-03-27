@@ -2,7 +2,7 @@ import { createContext, ReactNode, useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import Router from 'next/router'
 
-type User = {
+export type User = {
   name?: string | null | undefined
   email?: string | null | undefined
   image?: string | null | undefined
