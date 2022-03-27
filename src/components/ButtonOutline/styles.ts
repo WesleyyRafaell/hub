@@ -42,17 +42,16 @@ const wrapperModifiers = {
 
 type BoxProps = {
   hasIcon: boolean
-} & Pick<ButtonOutlineProps, 'size'>
+} & Pick<ButtonOutlineProps, 'size' | 'outline'>
 
 export const Box = styled.div<BoxProps>`
-  background: #3a343a;
-  color: #fff;
-  border-radius: 11px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  ${({ size, hasIcon }) => css`
+  ${({ size, hasIcon, outline }) => css`
+    background: ${outline ? '#3a343a' : 'transparent'};
+    color: #fff;
+    border-radius: 11px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     ${!!size && wrapperModifiers[size]}
     ${hasIcon && wrapperModifiers.hasIcon}
   `}

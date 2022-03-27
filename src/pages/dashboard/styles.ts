@@ -1,9 +1,10 @@
 import styled, { css } from 'styled-components'
 
-export const Wrapper = styled.div``
-
-export const Title = styled.h1`
+export const Wrapper = styled.div`
   ${({ theme }) => css`
-    color: ${theme.colors.Coral};
+    background: ${theme.colors.white};
+    height: 100%;
   `}
 `
+
+export const Title = styled.h1``
