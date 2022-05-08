@@ -1,11 +1,15 @@
 import { createContext, ReactNode, useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import Router from 'next/router'
+import { getUserDataFromApi } from 'services/getUser'
 
-export type User = {
-  name?: string | null | undefined
-  email?: string | null | undefined
-  image?: string | null | undefined
+type Userdata = {
+  login: string
+  avatar_url: string
+  location: string
+  bio: string
+  followers: number
+  following: number
 }
 
 type AuthProviderProps = {
@@ -13,13 +17,15 @@ type AuthProviderProps = {
 }
 
 type AuthContextType = {
-  user: User | undefined
+  userData: Userdata | undefined
 }
 
 export const AuthContext = createContext({} as AuthContextType)
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<User | undefined>(undefined)
+  const [userName, setUserName] = useState<string | null | undefined>()
+  const [userData, setUserData] = useState<Userdata>()
+
   const { data: session, status } = useSession()
   const isUser = !!session?.user
 
@@ -32,12 +38,42 @@ export function AuthProvider({ children }: AuthProviderProps) {
         return
       }
 
-      setUser(session?.user)
-      Router.push('dashboard')
+      const name = session?.user?.name
+
+      if (name) {
+        setUserName(name)
+      }
     })()
   }, [isUser, status, session])
 
+  useEffect(() => {
+    if (!userName) return
+
+    getUserData(userName)
+  }, [userName])
+
+  const getUserData = async (name: string) => {
+    const result = await getUserDataFromApi(name)
+
+    if (result?.data) {
+      const { login, avatar_url, location, bio, followers, following } =
+        result.data
+
+      const data = {
+        login,
+        avatar_url,
+        location,
+        bio,
+        followers,
+        following
+      }
+
+      setUserData(data)
+      Router.push('dashboard')
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ userData }}>{children}</AuthContext.Provider>
   )
 }

@@ -1,6 +1,6 @@
 import api from './api'
 
-export const getUserData = async (user: string) => {
+export const getUserDataFromApi = async (user: string) => {
   try {
     const result = api.get(`${user}`)
     return result
