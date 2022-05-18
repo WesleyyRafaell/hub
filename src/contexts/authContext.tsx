@@ -1,7 +1,14 @@
 import { createContext, ReactNode, useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import Router from 'next/router'
-import { getUserDataFromApi } from 'services/getUser'
+import { getUserDataFromApi, getUserReposFromApi } from 'services/getUser'
+
+type ArrayRepos = {
+  id: number
+  name: string
+  description: string
+  html_url: string
+}
 
 type Userdata = {
   login: string
@@ -10,6 +17,7 @@ type Userdata = {
   bio: string
   followers: number
   following: number
+  repos: Array<ArrayRepos>
 }
 
 type AuthProviderProps = {
@@ -53,11 +61,26 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [userName])
 
   const getUserData = async (name: string) => {
-    const result = await getUserDataFromApi(name)
+    const result = await Promise.all([
+      getUserDataFromApi(name),
+      getUserReposFromApi(name)
+    ])
 
-    if (result?.data) {
+    if (result[0] && result[1]) {
       const { login, avatar_url, location, bio, followers, following } =
-        result.data
+        result[0].data
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const repos = result[1].data.map(
+        ({ id, name, description, html_url }: ArrayRepos) => {
+          return {
+            id,
+            name,
+            description,
+            html_url
+          }
+        }
+      )
 
       const data = {
         login,
@@ -65,7 +88,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         location,
         bio,
         followers,
-        following
+        following,
+        repos
       }
 
       setUserData(data)
